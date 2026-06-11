@@ -1,0 +1,36 @@
+# Ghostty companion config for ghostty-native tmux UX
+#
+# These lines go in your ~/.config/ghostty/config
+# (NOT ~/Library/Application Support/com.mitchellh.ghostty/config —
+# that file loads LAST on macOS and wins scalar conflicts, so keep it
+# comment-only or remove it once you have a single config file).
+#
+# Reload with cmd+shift+, (reload_config action) after editing.
+# New surfaces pick up config changes; existing surfaces need a restart
+# to get the new scrollback limit.
+
+# ── Scrollback ────────────────────────────────────────────────────────────────
+# 100 MB per surface. Covers multi-day agent sessions without swapping.
+# Applies to surfaces opened AFTER config reload; existing windows keep
+# their previous limit.
+scrollback-limit = 100000000
+
+# ── Mouse behaviour ───────────────────────────────────────────────────────────
+# never: Ghostty ignores the terminal's XTSHIFTESCAPE request, so
+# shift+drag always produces a native Ghostty selection even inside apps
+# that request the mouse (vim, htop). Useful escape hatch when you need
+# to select across tmux pane boundaries or copy from a TUI.
+mouse-shift-capture = never
+
+# ── REMOVE this line if it is in your config ─────────────────────────────────
+# copy-on-select = clipboard
+#
+# With tmux mouse off (ghostty-native mode), copy-on-select does nothing
+# useful for in-terminal selections — tmux never enters copy-mode, so there
+# is nothing to auto-copy. More importantly, restoring the macOS default
+# (select != copy) means accidental drags do not silently overwrite your
+# clipboard. Intentional copies: cmd+C (Ghostty native) or prefix+[ then y
+# (tmux copy-mode → OSC 52 → clipboard).
+#
+# If you had copy-on-select = clipboard for the fusion/mouse-on workflow,
+# remove it now. The line above is a comment only — do not leave it active.
