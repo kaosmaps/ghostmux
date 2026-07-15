@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * verify-ux.ts — standalone live proof for ghostty-native tmux UX
+ * verify-ux.ts — standalone live proof for the `ghostty` profile tmux UX
  *
  * Requires: bun, tmux >= 3.5a, script(1), macOS or Linux.
  * Run from any directory: bun harness/verify-ux.ts
@@ -11,7 +11,7 @@
  *   - Cleanup (kill all gmx-* servers, rm temp files) runs even on failure
  *
  * Test matrix:
- *   T1  Block facts: reads ../tmux/ghostty-native.conf (the shipped artifact),
+ *   T1  Block facts: reads ../tmux/ghostty.conf (the shipped artifact),
  *       loads it into a scratch server, asserts mouse off / set-clipboard on /
  *       history-limit / smcup@ / zero custom copy-mode-vi bindings
  *   T2  Alt-screen byte oracle: script(1) captures client bytes;
@@ -248,7 +248,7 @@ const SOCKETS = ["gmx-a", "gmx-ctrl", "gmx-b", "gmx-outer", "gmx-refresh", "gmx-
 // Resolve the shipped conf relative to this script file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const NATIVE_CONF = resolve(__dirname, "..", "tmux", "ghostty-native.conf");
+const NATIVE_CONF = resolve(__dirname, "..", "tmux", "ghostty.conf");
 
 // ── cleanup ───────────────────────────────────────────────────────────────────
 
@@ -283,9 +283,9 @@ async function main(): Promise<void> {
   // T1.1 — native server starts successfully with the shipped conf
   const t1Start = await tmux("gmx-a", "-f", NATIVE_CONF, "new-session", "-d", "-s", "s", "-x", "200", "-y", "50");
   if (t1Start.exitCode !== 0) {
-    fail("T1.1", "native server starts with ghostty-native.conf", `exit ${t1Start.exitCode}: ${t1Start.stderr}`);
+    fail("T1.1", "native server starts with ghostty.conf", `exit ${t1Start.exitCode}: ${t1Start.stderr}`);
   } else {
-    pass("T1.1", "native server starts with ghostty-native.conf");
+    pass("T1.1", "native server starts with ghostty.conf");
   }
 
   // T1.2 — list-keys count equals control (no custom copy-mode-vi additions)
@@ -445,7 +445,7 @@ async function main(): Promise<void> {
   // This is the regression class that killed fusion mode: CPR replies from agent
   // TUIs arrive through the outer-pane TTY and in fusion mode (with type-to-exit
   // bindings) would cancel copy-mode and leak "12;34R" to the shell prompt.
-  // In ghostty-native mode, the inner server has no custom copy-mode bindings,
+  // In the `ghostty` profile, the inner server has no custom copy-mode bindings,
   // so tmux treats CPR as a terminal protocol response (not a key event) and
   // copy-mode stays intact.
   await tmux("gmx-outer", "send-keys", "-H", "-t", "o1", "1b 5b 31 32 3b 33 34 52");
