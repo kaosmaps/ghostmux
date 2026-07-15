@@ -1,4 +1,4 @@
-# zsh/bindkeys.zsh — vi-mode home/end fix for ghostty-native tmux UX
+# zsh/bindkeys.zsh — vi-mode home/end fix for the `ghostty` profile tmux UX
 #
 # Source this from ~/.zshrc (or paste the two bindkey lines directly):
 #   source ~/.config/ghostmux/zsh/bindkeys.zsh

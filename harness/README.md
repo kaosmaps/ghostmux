@@ -2,7 +2,7 @@
 
 ## What this is
 
-`verify-ux.ts` is a standalone Bun script that proves the ghostty-native UX
+`verify-ux.ts` is a standalone Bun script that proves the `ghostty` profile UX
 config does what it claims, using live tmux processes — not mocks.
 
 The technique: an **outer tmux server** hosts a pane whose process is an
@@ -29,7 +29,7 @@ yanked the scroll position to the bottom and leaked protocol fragments
 distinguishes machine bytes from human keys.
 
 The nested-tmux technique can reproduce this exactly: inject a CPR burst via
-`send-keys -H` and assert whether copy-mode survives (T3). ghostty-native
+`send-keys -H` and assert whether copy-mode survives (T3). The `ghostty` profile
 passes; fusion failed. The harness makes "survives agent TUI noise" a green
 test, not a subjective claim.
 
@@ -37,14 +37,14 @@ test, not a subjective claim.
 
 | Test | Claim proved |
 |------|-------------|
-| T1.1 | The shipped `../tmux/ghostty-native.conf` is a valid tmux config that a scratch server can load without errors. |
+| T1.1 | The shipped `../tmux/ghostty.conf` is a valid tmux config that a scratch server can load without errors. |
 | T1.2 | The config adds **zero** custom copy-mode-vi key bindings (key count equals a vanilla `/dev/null` server). This is the core architectural claim: no key-binding layer means no key-binding failure modes. |
 | T1.3 | `mouse off` — Ghostty, not tmux, handles all mouse events. |
 | T1.4 | `set-clipboard on` — OSC 52 clipboard path is active for intentional copy-mode (`prefix+[`, press `y`). |
 | T1.5 | `history-limit 100000` — 100k lines of tmux history available as a fallback via `prefix+[`. |
 | T1.6 | `terminal-overrides` contains `smcup@` — the alternate-screen suppression override is present. |
 | T2.1 | **Oracle control arm**: a client with no `smcup@` override does send `ESC[?1049h` (alternate-screen enter). Proves the test infrastructure is real; if this fails, terminfo for `xterm-ghostty` is missing on the host. |
-| T2.2 | **Alternate-screen byte oracle**: a client loading `ghostty-native.conf` does **not** send `ESC[?1049h`. Proves the `smcup@` override suppresses alternate-screen switching at the byte level. |
+| T2.2 | **Alternate-screen byte oracle**: a client loading `ghostty.conf` does **not** send `ESC[?1049h`. Proves the `smcup@` override suppresses alternate-screen switching at the byte level. |
 | T3.0 | Server-side `copy-mode` command enters copy-mode (`pane_in_mode=1`). |
 | T3.1 | **CPR noise immunity**: injecting `ESC[12;34R` (cursor-position report) via the outer client does not cancel copy-mode in the inner server. This is the regression class that killed fusion mode. |
 | T3.2 | Copy-mode exits cleanly on a server-side `send-keys -X cancel`. |

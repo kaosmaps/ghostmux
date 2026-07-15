@@ -61,7 +61,7 @@ structurally incompatible with terminals that do ongoing capability probing.
 
 ## What replaced it
 
-**ghostty-native mode**: tmux mouse off, `smcup@/rmcup@` override.
+**the `ghostty` profile**: tmux mouse off, `smcup@/rmcup@` override.
 
 The insight: Ghostty 1.3.1 saves region-scrolled lines to scrollback. With a
 status bar enabled, tmux scrolls a *region* (not the full screen); historically
@@ -85,7 +85,7 @@ the primary interaction path. Primary path is now: trackpad scroll, drag to
 select, cmd+C, cmd+V. Exactly like a plain terminal.
 
 The nested-tmux test rig (T3 in the harness) confirms: inject the same CPR
-burst into a ghostty-native session in copy-mode — `pane_in_mode` stays `1`,
+burst into a `ghostty`-profile session in copy-mode — `pane_in_mode` stays `1`,
 no `12;34R` fragment in the prompt. Zero configuration change required to
 achieve this; it falls out of having no type-to-exit bindings.
 
